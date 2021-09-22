@@ -11,22 +11,42 @@
 
 <body>
     <header>
-        <buton id="view-highscore-left" class="high-score-leftside">
-            View Highscore
-        </buton>
-        <div id="timer-right" class="timer">Timer: <span class="time-count">0</span></div>
+        <div id="view-highscore-left" class="high-score-leftside">
+            <button><a href='./highscore.html'>View Highscore</a></button>
+        </div>
+        <div id="timer-right" class="timer">Timer: <div class="time-count">0</div>
+        </div>
     </header>
-
-    <section>
+    <section id='startGame'>
         <div class="main-box">
             <h1>Let's play with coding</h1>
             <p>This is a quiz to test your knowledge about coding.</p>
-            <button class="start" id="startbtn">
+            <button class="start hide" id="startbtn">
                 START QUIZ
             </button>
         </div>
-    </section>
+        <div id="question-container" class="hide">
+            <h2 id="question-text"></h2>
+            <div id="answerbtn" class="answer-buttons">
+                <button class="btn" id="answer0"><span></span></button>
+                <button class="btn" id="answer1"><span></span></button>
+                <button class="btn" id="answer2"><span></span></button>
+                <button class="btn" id="answer3"><span></span></button>
+            </div>
+            <h3 id=result></h3>
+        </div>
 
+        <div id="finish-screen" class='hide'>
+            <h2>All done!</h2>
+            <p>Your final score is <span id="final-score"></span></p>
+            <p>
+                Enter your name: <input type="text" id='user-name' />
+                <button id="submit">Submit</button>
+            </p>
+        </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="script.js"></script>
 </body>
 
