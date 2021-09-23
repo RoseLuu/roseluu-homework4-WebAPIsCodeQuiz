@@ -1,22 +1,21 @@
 var currentQuestionIndex = 0;
 var timeCount = document.querySelector(".time-count");
-var highScore = document.querySelector(".high-score-leftside");
+// var highScore = document.querySelector(".high-score-leftside");
 var gameStart = document.querySelector('#startbtn');
 var mainBox = document.querySelector('.main-box');
 var showQues = document.querySelector('#question-container');
 // var questionElement = document.querySelector('#question-text');
 var selAnswer = document.querySelector('.answer-buttons');
-var answerEl1 = document.querySelector('#answer0');
-var answerEl2 = document.querySelector('#answer1');
-var answerEl3 = document.querySelector('#answer2');
-var answerEl4 = document.querySelector('#answer3');
 var timeElement = document.querySelector('.time-count')
-var timeLeft = 70;
+var timeLeft = 75;
 var time;
 var timeCount;
 var quizCompleted = document.querySelector('#finish-screen');
-var answerEl = document.querySelector('.btn')
+var answerEl = document.querySelector('.btn');
+var result = document.querySelector('#result');
+var finalScore = document.querySelector('#final-score');
 
+//set time running form 75
 function startTime() {
     timeInterval = setInterval(function () {
         timeLeft--;
@@ -28,21 +27,23 @@ function startTime() {
         checkTimeRemaining();
     }, 1000);
 }
+//check if time equal 0 the the time count will stop
 function checkTimeRemaining() {
     if (timeLeft <= 0) {
-        // disableQuiz();
         clearInterval(timeInterval);
-        showFinalScore();
+        showFinalScore(); //run final score function
     }
 }
+//set the finish screen pop up when the quiz is done or timeCount=0
 function showFinalScore() {
-    console.log(timeLeft);
+    //console.log(timeLeft);
     showQues.setAttribute('class', 'hide');
     quizCompleted.removeAttribute('class')
-    console.log('question completed')
-    var finalScore = document.querySelector('#final-score');
+    //console.log('question completed')
     finalScore.textContent = timeLeft;
+    // localStorage.setItem('time', timeLeft);
 }
+//start the game
 function startGame() {
     console.log('you start the game')
     //hide the main box
@@ -53,7 +54,7 @@ function startGame() {
     //start time
     startTime();
 }
-
+// event happen when the start button click
 gameStart.addEventListener('click', startGame)
 
 function showQuestion(index) {
@@ -69,12 +70,22 @@ function showQuestion(index) {
 }
 selAnswer.addEventListener('click', choiceSelected)
 //if user select the answer
+//$("#result").delay(3200).hide(0);
+
 function choiceSelected(event) {
     //console.log(event.target.textContent);
     if (event.target.textContent !== questions[currentQuestionIndex].correct) {
         timeLeft -= 15;
+        result.textContent = 'Wrong';
+        setTimeout(function () {
+            result.textContent = '';
+        }, 1000);
+    } else {
+        result.textContent = 'Correct';
+        setTimeout(function () {
+            result.textContent = '';
+        }, 1000);
     }
-    //console.log(questions[currentQuestionIndex].correct);
     if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
         showQuestion(currentQuestionIndex);
@@ -84,8 +95,6 @@ function choiceSelected(event) {
     }
     checkTimeRemaining()
 }
-// function disableQuiz() { }
-
 var questions = [
     {
         question: 'What does HTML stand for?',
@@ -113,6 +122,26 @@ var questions = [
         correct: 'console.log',
     }
 ]
-
-
-
+//saving the score
+var nameEl = document.querySelector('#user-name')
+var submitScore = document.querySelector('#submit');
+function saveProgress(event) {
+    // console.log('saved')
+    event.preventDefault();
+    var score = timeLeft;
+    var userName = nameEl.value.trim();
+    //save name and score to local storage
+    if (userName !== "") {
+        var viewScore = JSON.parse(localStorage.getItem('highscores')) || [];
+        var newScore = {
+            initials: userName,
+            userScore: score,
+        }
+        viewScore.push(newScore); //add newScore to localStore 
+        //convert viewScore object into an JSON string with highscores key to be store in localStorage
+        window.localStorage.setItem('highscores', JSON.stringify(viewScore));
+    } else {
+        alert('You need to type your initials to save your score')
+    }
+}
+submitScore.addEventListener('click', saveProgress);
